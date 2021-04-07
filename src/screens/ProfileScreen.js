@@ -12,9 +12,6 @@ import Modal from "../components/Modal";
 const Height = Dimensions.get("window").height;
 
 const Profile = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <>
       <View style={styles.container}>
@@ -23,21 +20,10 @@ const Profile = () => {
           <Text>hiii</Text>
         </View>
         <View style={styles.botBackContainer}>
-          <View style={styles.botContainer}></View>
+          <View style={styles.boteContainer}>
+            <Text>hiii</Text>
+          </View>
         </View>
-        <TouchableOpacity
-          style={styles.moodButton}
-          onPress={() => {
-            setIsOpen(true);
-            setIsVisible(true);
-          }}
-        ></TouchableOpacity>
-        <Modal
-          isVisible={isVisible}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          setIsVisible={setIsVisible}
-        />
       </View>
     </>
   );
@@ -64,18 +50,9 @@ const styles = StyleSheet.create({
     backgroundColor: "blue",
     flex: 1,
   },
-  botContainer: { borderTopRightRadius: 75, flex: 1, backgroundColor: "white" },
-  moodButton: {
-    position: "absolute",
-    borderRadius: 25,
-    height: 50,
-    width: 50,
-    right: 10,
-    bottom: 10,
-    backgroundColor: "green",
-  },
-  modal: {
-    backgroundColor: "red",
-    width: "100%",
+  boteContainer: {
+    borderTopRightRadius: 75,
+    height: 400,
+    backgroundColor: "yellow",
   },
 });

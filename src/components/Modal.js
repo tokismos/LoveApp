@@ -4,6 +4,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   Dimensions,
 } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
@@ -22,7 +23,7 @@ const SPRING_CONFIG = {
   restSpeedThreshold: 0.1,
   stiffness: 500,
 };
-const Height = Dimensions.get("window").height;
+const Height = Dimensions.get("screen").height;
 
 const Modal = ({ isVisible, setIsVisible }) => {
   const top = useSharedValue(Height);
@@ -43,6 +44,10 @@ const Modal = ({ isVisible, setIsVisible }) => {
         //stoper le defilement vers le haut quand le modal est ouvert
         return;
       }
+      if (top.value == Height - 150 && event.translationY > 0) {
+        //stoper le defilement vers le haut quand le modal est ouvert
+        return;
+      }
       top.value = ctx.value + event.translationY;
       console.log(event.translationY);
     },
@@ -51,8 +56,9 @@ const Modal = ({ isVisible, setIsVisible }) => {
         top.value = 200;
         runOnJS(setIsBig)(true);
       } else if (event.translationY > Height / 5) {
-        top.value = Height - 150;
+        top.value = Height;
         runOnJS(setIsBig)(false);
+        runOnJS(setIsVisible)(false);
       } else {
         if (isBig) {
           //pour retourner au state precedent du modal si on swipe une petite distance
@@ -75,12 +81,13 @@ const Modal = ({ isVisible, setIsVisible }) => {
   return (
     <>
       {isVisible && (
-        <TouchableOpacity
-          style={styles.closeView}
+        <TouchableWithoutFeedback
           onPress={() => {
             setIsVisible(false);
           }}
-        ></TouchableOpacity>
+        >
+          <View style={styles.closeView}></View>
+        </TouchableWithoutFeedback>
       )}
       <PanGestureHandler onGestureEvent={eventHandler}>
         <Animated.View style={[styles.modalView, modalStyle]}></Animated.View>
@@ -104,8 +111,9 @@ const styles = StyleSheet.create({
   closeView: {
     position: "absolute",
     top: 0,
-    bottom: 0,
-    left: 0,
     right: 0,
+    left: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.2)",
   },
 });
