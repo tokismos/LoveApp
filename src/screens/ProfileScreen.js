@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+import ListMood from "../components/ListMood";
 import Modal from "../components/Modal";
 
 const Height = Dimensions.get("window").height;
@@ -20,8 +21,9 @@ const Profile = () => {
           <Text>hiii</Text>
         </View>
         <View style={styles.botBackContainer}>
-          <View style={styles.boteContainer}>
+          <View style={styles.botContainer}>
             <Text>hiii</Text>
+            <ListMood />
           </View>
         </View>
       </View>
@@ -50,9 +52,9 @@ const styles = StyleSheet.create({
     backgroundColor: "blue",
     flex: 1,
   },
-  boteContainer: {
+  botContainer: {
     borderTopRightRadius: 75,
-    height: 400,
+    flex: 1,
     backgroundColor: "yellow",
   },
 });

@@ -16,24 +16,24 @@ const ListMood = () => {
     "sad",
     "yeaay",
     "in Love",
-    "happy",
-    "sad",
-    "yeaay",
-    "in Love",
-    "happy",
-    "sad",
-    "yeaay",
-    "in Love",
-    "happy",
-    "sad",
-    "yeaay",
-    "in Love",
+    "happye",
+    "sadd",
+    "yeaayas",
+    "in Lovecx",
+    "happyvc",
+    "sadvcx",
+    "yeaayz",
+    "in Loveb",
+    "happnnby",
+    "snbvd",
+    "yenbvwaay",
+    "iwn Love",
   ];
   return (
     <View>
       <FlatList
         data={moods}
-        key={(item) => item}
+        keyExtractor={(item) => item}
         renderItem={({ item }) => <ListView item={item} />}
       />
     </View>

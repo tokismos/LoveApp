@@ -15,7 +15,13 @@ import Animated, {
   withSpring,
   runOnJS,
 } from "react-native-reanimated";
+import ListMood from "./ListMood";
 
+import Triste from "../assets/moodIcons/triste.svg";
+import Neutre from "../assets/moodIcons/neutre.svg";
+import Sick from "../assets/moodIcons/sick.svg";
+import Love from "../assets/moodIcons/love.svg";
+import Heureux from "../assets/moodIcons/heureux.svg";
 const SPRING_CONFIG = {
   damping: 80,
   overshootClamping: true,
@@ -23,48 +29,49 @@ const SPRING_CONFIG = {
   restSpeedThreshold: 0.1,
   stiffness: 500,
 };
-const Height = Dimensions.get("screen").height;
-
+const Height = Dimensions.get("window").height;
+const heightMinModal = Height / 5;
 const Modal = ({ isVisible, setIsVisible }) => {
-  const top = useSharedValue(Height);
+  const height = useSharedValue(0);
   const [isBig, setIsBig] = useState(false);
 
   const modalStyle = useAnimatedStyle(() => {
     return {
-      top: withSpring(top.value, SPRING_CONFIG),
+      height: withSpring(height.value, SPRING_CONFIG),
     };
   });
 
   const eventHandler = useAnimatedGestureHandler({
     onStart: (event, ctx) => {
-      ctx.value = top.value;
+      ctx.value = height.value;
     },
     onActive: (event, ctx) => {
-      if (top.value == 200 && event.translationY < 0) {
+      if (height.value >= Height - 200 && event.translationY < 0) {
         //stoper le defilement vers le haut quand le modal est ouvert
         return;
       }
-      if (top.value == Height - 150 && event.translationY > 0) {
+
+      if (height.value <= heightMinModal && event.translationY > 0) {
         //stoper le defilement vers le haut quand le modal est ouvert
         return;
       }
-      top.value = ctx.value + event.translationY;
+      height.value = ctx.value - event.translationY;
       console.log(event.translationY);
     },
     onEnd: (event, ctx) => {
       if (event.translationY < -Height / 5) {
-        top.value = 200;
+        height.value = Height - 200;
         runOnJS(setIsBig)(true);
       } else if (event.translationY > Height / 5) {
-        top.value = Height;
+        height.value = 0;
         runOnJS(setIsBig)(false);
         runOnJS(setIsVisible)(false);
       } else {
         if (isBig) {
           //pour retourner au state precedent du modal si on swipe une petite distance
-          top.value = 200;
+          height.value = Height - 200;
         } else {
-          top.value = Height - 150;
+          height.value = heightMinModal;
         }
       }
     },
@@ -73,9 +80,9 @@ const Modal = ({ isVisible, setIsVisible }) => {
   useEffect(() => {
     if (isVisible) {
       //when we open it we show the modal
-      top.value = Height - 150;
+      height.value = heightMinModal;
     } else {
-      top.value = Height;
+      height.value = 0;
     }
   }, [isVisible]);
   return (
@@ -90,7 +97,16 @@ const Modal = ({ isVisible, setIsVisible }) => {
         </TouchableWithoutFeedback>
       )}
       <PanGestureHandler onGestureEvent={eventHandler}>
-        <Animated.View style={[styles.modalView, modalStyle]}></Animated.View>
+        <Animated.View style={[styles.modalView, modalStyle]}>
+          <View style={styles.moodView}>
+            <Sick height={50} width={50} />
+            <Triste height={50} width={50} />
+            <Neutre height={50} width={50} />
+            <Heureux height={50} width={50} />
+            <Love height={50} width={50} />
+          </View>
+          <ListMood />
+        </Animated.View>
       </PanGestureHandler>
     </>
   );
@@ -99,6 +115,12 @@ const Modal = ({ isVisible, setIsVisible }) => {
 export default Modal;
 
 const styles = StyleSheet.create({
+  moodView: {
+    alignItems: "center",
+    height: 150,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   modalView: {
     position: "absolute",
     backgroundColor: "black",

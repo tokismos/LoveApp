@@ -36,12 +36,7 @@ const BottomNavigatorScreens = () => {
       })}
       tabBarOptions={{
         showLabel: false,
-        style: {
-          marginBottom: 20,
-          marginLeft: 20,
-          marginRight: 20,
-          borderRadius: 20,
-        },
+        style: styles.botTab,
       }}
     >
       <Tab.Screen name="LoverScreen" component={LoverScreen} />
@@ -75,6 +70,12 @@ export default () => {
 };
 
 const styles = StyleSheet.create({
+  botTab: {
+    marginBottom: 20,
+    marginLeft: 20,
+    marginRight: 20,
+    borderRadius: 20,
+  },
   modalButton: {
     position: "absolute",
     height: 80,
