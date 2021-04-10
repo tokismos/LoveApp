@@ -84,5 +84,6 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     bottom: 30,
     alignSelf: "center",
+    elevation: 7,
   },
 });
