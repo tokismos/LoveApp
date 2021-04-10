@@ -31,6 +31,25 @@ const SPRING_CONFIG = {
 };
 const Height = Dimensions.get("window").height;
 const heightMinModal = Height / 5;
+
+const moodSMiley = [
+  { name: "sick", mood: <Sick height={50} width={50} /> },
+  { name: "triste", mood: <Triste height={50} width={50} /> },
+  { name: "neutre", mood: <Neutre height={50} width={50} /> },
+  { name: "heureux", mood: <Heureux height={50} width={50} /> },
+  { name: "love", mood: <Love height={50} width={50} /> },
+];
+
+const ShowMoodSmiley = () => {
+  return moodSMiley.map((item) => (
+    <TouchableOpacity
+      onPress={() => console.log("you pressed :", item.name)}
+      key={item.name}
+    >
+      {item.mood}
+    </TouchableOpacity>
+  ));
+};
 const Modal = ({ isVisible, setIsVisible }) => {
   const height = useSharedValue(0);
   const [isBig, setIsBig] = useState(false);
@@ -60,6 +79,8 @@ const Modal = ({ isVisible, setIsVisible }) => {
     },
     onEnd: (event, ctx) => {
       if (event.translationY < -Height / 5) {
+        console.log("thiiis");
+
         height.value = Height - 200;
         runOnJS(setIsBig)(true);
       } else if (event.translationY > Height / 5) {
@@ -91,6 +112,7 @@ const Modal = ({ isVisible, setIsVisible }) => {
         <TouchableWithoutFeedback
           onPress={() => {
             setIsVisible(false);
+            height.value = 0;
           }}
         >
           <View style={styles.closeView}></View>
@@ -99,11 +121,7 @@ const Modal = ({ isVisible, setIsVisible }) => {
       <PanGestureHandler onGestureEvent={eventHandler}>
         <Animated.View style={[styles.modalView, modalStyle]}>
           <View style={styles.moodView}>
-            <Sick height={50} width={50} />
-            <Triste height={50} width={50} />
-            <Neutre height={50} width={50} />
-            <Heureux height={50} width={50} />
-            <Love height={50} width={50} />
+            <ShowMoodSmiley />
           </View>
           <ListMood />
         </Animated.View>
@@ -120,10 +138,11 @@ const styles = StyleSheet.create({
     height: 150,
     flexDirection: "row",
     justifyContent: "space-between",
+    marginHorizontal: 20,
   },
   modalView: {
     position: "absolute",
-    backgroundColor: "black",
+    backgroundColor: "white",
     bottom: 0,
     right: 0,
     left: 0,

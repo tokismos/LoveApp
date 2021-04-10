@@ -1,3 +1,5 @@
 expo install react-native-svg
 
 yarn add --dev react-native-svg-transformer
+
+expo install expo-image-picker
