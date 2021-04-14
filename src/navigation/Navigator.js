@@ -1,13 +1,35 @@
-import React, { useState } from "react";
-import { TouchableOpacity, StyleSheet } from "react-native";
+import React, { useContext, useState } from "react";
+import { TouchableOpacity, StyleSheet, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
 import LoverScreen from "../screens/LoverScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import IMGLOVER from "../assets/icons/lover.svg";
 import IMGPROFILE from "../assets/icons/profile.svg";
 import Modal from "../components/Modal";
+import SignInScreen from "../screens/SignInScreen";
+import SignUpScreen from "../screens/SignUpScreen";
+
+import { auth } from "../helpers/db";
+import { useEffect } from "react/cjs/react.development";
+import { Context as AuthContext } from "../context/authContext";
+
+const AuthStack = createStackNavigator();
+
+const AuthStackScreen = () => {
+  return (
+    <AuthStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <AuthStack.Screen name="SignUp" component={SignUpScreen} />
+      <AuthStack.Screen name="SignIn" component={SignInScreen} />
+    </AuthStack.Navigator>
+  );
+};
 
 const Tab = createBottomTabNavigator();
 
@@ -47,6 +69,21 @@ const BottomNavigatorScreens = () => {
 
 export default () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [uid, setUserId] = useState(null);
+  const [splash, setSplash] = useState(true);
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUserId(user.uid);
+        setSplash(false);
+        console.log("there is a user");
+      } else {
+        setUserId(null);
+        setSplash(false);
+      }
+    });
+  }, []);
 
   const ModalButton = () => {
     return (
@@ -58,14 +95,30 @@ export default () => {
       ></TouchableOpacity>
     );
   };
-  return (
-    <>
-      <NavigationContainer>
+
+  const ShowScreen = () => {
+    return splash ? null : uid ? (
+      <>
         <BottomNavigatorScreens />
-      </NavigationContainer>
-      <ModalButton />
-      <Modal isVisible={isVisible} setIsVisible={setIsVisible} />
-    </>
+        <ModalButton />
+        <Modal isVisible={isVisible} setIsVisible={setIsVisible} />
+      </>
+    ) : (
+      <AuthStackScreen />
+    );
+  };
+  return (
+    <NavigationContainer>
+      <ShowScreen />
+    </NavigationContainer>
+
+    // <>
+    //   <NavigationContainer>
+    //     <BottomNavigatorScreens />
+    //   </NavigationContainer>
+    //   <ModalButton />
+    //   <Modal isVisible={isVisible} setIsVisible={setIsVisible} />
+    // </>
   );
 };
 
@@ -84,6 +137,6 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     bottom: 30,
     alignSelf: "center",
-    elevation: 7,
+    elevation: 6,
   },
 });

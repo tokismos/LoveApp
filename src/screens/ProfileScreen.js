@@ -26,6 +26,8 @@ import {
   TapGestureHandler,
 } from "react-native-gesture-handler";
 import { BlurView } from "expo-blur";
+import ImgView from "../components/ImgView";
+import { auth } from "../helpers/db";
 
 const Height = Dimensions.get("screen").height;
 const Width = Dimensions.get("screen").width;
@@ -33,7 +35,7 @@ const Width = Dimensions.get("screen").width;
 const imguri =
   "file:/data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FLoveApp-fd9bd671-2d63-4e5e-8ab0-dc5d0fa0605b/ImagePicker/2bfb696c-3230-4fff-8d97-c263b854fbcc.jpg";
 const Profile = () => {
-  const [img, setImg] = useState(null);
+  const [img, setImg] = useState(imguri);
   const [isVisible, setIsVisible] = useState(false);
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -60,70 +62,35 @@ const Profile = () => {
   const scale = useSharedValue(1);
   const translateX = useSharedValue(0);
 
-  const eventHandler = useAnimatedGestureHandler({
-    onStart: (event, ctx) => {
-      runOnJS(setIsVisible)(true);
-    },
-
-    onFinish: (event, ctx) => {
-      runOnJS(setIsVisible)(false);
-    },
-    onEnd: (event, ctx) => {
-      runOnJS(setIsVisible)(false);
-    },
-  });
-
   //show the big image when we click on the small one
-  const ImgView = () => {
-    return (
-      <BlurView
-        intensity={100}
-        style={[
-          {
-            position: "absolute",
-            height: Height,
-            width: Width,
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 1,
-            padding: 1,
-          },
-        ]}
-      >
-        <Image
-          style={{
-            height: Height,
-            width: Width,
-            resizeMode: "contain",
-          }}
-          source={{ uri: img }}
-        />
-      </BlurView>
-    );
-  };
+
   return (
     <>
       <View style={styles.container}>
-        {isVisible && <ImgView />}
+        {/* Begin--> show the image in the screen when pressed on */}
+        {isVisible && (
+          <Image
+            source={{ uri: img }}
+            style={{
+              position: "absolute",
+              height: Height,
+              width: Width,
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1,
+              resizeMode: "contain",
+            }}
+          />
+        )}
+        {/* end */}
         <View style={styles.topContainer}>
-          <View style={styles.image}>
-            {img && (
-              <LongPressGestureHandler
-                maxDist={500}
-                onGestureEvent={eventHandler}
-              >
-                <Animated.Image
-                  style={{
-                    height: 150,
-                    width: 150,
-                    resizeMode: "contain",
-                  }}
-                  source={{ uri: img }}
-                />
-              </LongPressGestureHandler>
-            )}
-          </View>
+          <ImgView
+            setIsVisible={setIsVisible}
+            img={img}
+            style={{ borderRadius: 75 }}
+          />
           <Button title="select Img" onPress={() => pickImage()} />
+          <Button title="Log out" onPress={async () => await auth.signOut()} />
         </View>
         <View style={styles.botBackContainer}>
           <View style={styles.botContainer}></View>
@@ -152,15 +119,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderBottomLeftRadius: 70,
   },
-  image: {
-    justifyContent: "center",
-    borderRadius: 20,
-    alignItems: "center",
-    overflow: "hidden",
-    height: 150,
-    width: 150,
-    backgroundColor: "white",
-  },
+
   botBackContainer: {
     backgroundColor: "blue",
     flex: 1,

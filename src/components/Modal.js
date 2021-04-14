@@ -148,6 +148,7 @@ const styles = StyleSheet.create({
     left: 0,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    elevation: 6,
   },
   closeView: {
     position: "absolute",
