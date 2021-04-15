@@ -14,7 +14,6 @@ import SignUpScreen from "../screens/SignUpScreen";
 
 import { auth } from "../helpers/db";
 import { useEffect } from "react/cjs/react.development";
-import { Context as AuthContext } from "../context/authContext";
 
 const AuthStack = createStackNavigator();
 
@@ -100,17 +99,19 @@ export default () => {
     return splash ? null : uid ? (
       <>
         <BottomNavigatorScreens />
-        <ModalButton />
-        <Modal isVisible={isVisible} setIsVisible={setIsVisible} />
       </>
     ) : (
       <AuthStackScreen />
     );
   };
   return (
-    <NavigationContainer>
-      <ShowScreen />
-    </NavigationContainer>
+    <>
+      <NavigationContainer>
+        <ShowScreen />
+      </NavigationContainer>
+      <ModalButton />
+      <Modal isVisible={isVisible} setIsVisible={setIsVisible} />
+    </>
 
     // <>
     //   <NavigationContainer>

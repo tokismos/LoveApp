@@ -1,4 +1,3 @@
-import { BlurView } from "expo-blur";
 import React from "react";
 import {
   Dimensions,
@@ -9,19 +8,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import {
-  LongPressGestureHandler,
-  TouchableWithoutFeedback,
-} from "react-native-gesture-handler";
-import Animated, {
-  runOnJS,
-  useAnimatedGestureHandler,
-} from "react-native-reanimated";
-
-const Height = Dimensions.get("screen").height;
-const Width = Dimensions.get("screen").width;
 
 const ImgView = ({ img, style, setIsVisible }) => {
+  console.log("image rendeered");
+  console.log(img);
   return (
     <View style={[styles.image, { ...style }]}>
       {img && (

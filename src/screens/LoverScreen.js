@@ -1,21 +1,59 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text, View, Dimensions, Image } from "react-native";
 
 import Triste from "../assets/moodIcons/triste.svg";
+import Neutre from "../assets/moodIcons/neutre.svg";
+import Sick from "../assets/moodIcons/sick.svg";
+import Love from "../assets/moodIcons/love.svg";
+import Heureux from "../assets/moodIcons/heureux.svg";
 import Bouquet from "../assets/bouquet.svg";
 import ImgView from "../components/ImgView";
 import TabView from "../components/TabView";
+import { Context as MoodContext } from "../context/moodContext";
+import { getData } from "../helpers/db";
 
 const Width = Dimensions.get("window").width;
 const Height = Dimensions.get("window").height;
 const imguri =
-  "file:/data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FLoveApp-fd9bd671-2d63-4e5e-8ab0-dc5d0fa0605b/ImagePicker/4cff5c73-1da6-4fe4-a3c4-67665c896811.jpg";
+  "https://firebasestorage.googleapis.com/v0/b/loveapp-69783.appspot.com/o/images%2FEJa8ybCCvdepFogqHILHayDqM8H2?alt=media&token=ecf3688a-7252-40b0-96c5-b22e87f36e0e";
 const Lover = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [moodIcon, setMoodIcon] = useState(null);
   const [img, setImg] = useState(imguri);
+  const [moodText, setMoodText] = useState();
+  const [color, setColor] = useState("red");
+  const { state, loadMood } = useContext(MoodContext);
+
+  // Begin--> Show the icon mood in the screen according to the context currentMood
+  const showSmiley = () => {
+    switch (state.currentMood) {
+      case "Triste":
+        return setMoodIcon(<Triste height={50} width={50} />);
+      case "Neutre":
+        return setMoodIcon(<Neutre height={50} width={50} />);
+      case "Sick":
+        return setMoodIcon(<Sick height={50} width={50} />);
+      case "Triste":
+        return setMoodIcon(<Triste height={50} width={50} />);
+      case "Heureux":
+        return setMoodIcon(<Heureux height={50} width={50} />);
+      case "Love":
+        return setMoodIcon(<Love height={50} width={50} />);
+      default:
+        return null;
+    }
+  };
+  // end
+
+  useEffect(() => {
+    getData(loadMood); // get data from the database and set its value in the context loadMood
+    setMoodText(state.currentMood); // the text mood
+    showSmiley();
+  }, [state.currentMood]);
 
   return (
     <View style={styles.container}>
+      {/* Show the image when pressed */}
       {isVisible && (
         <Image
           source={{ uri: img }}
@@ -33,7 +71,7 @@ const Lover = () => {
       <View style={styles.topContainer}>
         {/* Begin--->the circle showing the status in the top left */}
         <View style={styles.statusContainer}>
-          <View style={styles.statusCircle} />
+          <View style={[styles.statusCircle, { backgroundColor: color }]} />
         </View>
         {/* end */}
 
@@ -71,24 +109,26 @@ const Lover = () => {
               style={styles.image}
             />
           )}
-          <View style={styles.smiley}>
-            <Triste height={50} width={50} />
-          </View>
+          {/* Show the smiley mood */}
+          <View style={styles.smiley}>{moodIcon}</View>
         </View>
 
         {/* end */}
 
         {/* Begin --> mood text view */}
-        <View style={styles.moodContainer}>
-          <Text
-            style={{
-              fontWeight: "bold",
-              color: "red",
-            }}
-          >
-            ANGRY
-          </Text>
-        </View>
+        {moodText ? (
+          <View style={styles.moodContainer}>
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: "red",
+              }}
+            >
+              {/* Show the text mood */}
+              {moodText}
+            </Text>
+          </View>
+        ) : null}
         {/* end */}
 
         {/* Begin--> Activity view  */}
@@ -97,7 +137,6 @@ const Lover = () => {
         </View>
         {/* end */}
       </View>
-
       {/* Begin -->the bottom half */}
       <View style={styles.botBackContainer}>
         <View style={styles.botContainer}>

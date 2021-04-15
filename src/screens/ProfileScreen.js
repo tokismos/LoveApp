@@ -27,14 +27,15 @@ import {
 } from "react-native-gesture-handler";
 import { BlurView } from "expo-blur";
 import ImgView from "../components/ImgView";
-import { auth } from "../helpers/db";
+import { auth, getImgFile } from "../helpers/db";
 
 const Height = Dimensions.get("screen").height;
 const Width = Dimensions.get("screen").width;
 
 const imguri =
-  "file:/data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FLoveApp-fd9bd671-2d63-4e5e-8ab0-dc5d0fa0605b/ImagePicker/2bfb696c-3230-4fff-8d97-c263b854fbcc.jpg";
+  "file:/data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FLoveApp-fd9bd671-2d63-4e5e-8ab0-dc5d0fa0605b/ImagePicker/5b019173-61c4-4918-8470-9e4f09e23922.jpg";
 const Profile = () => {
+  console.log("screen profile rerendered");
   const [img, setImg] = useState(imguri);
   const [isVisible, setIsVisible] = useState(false);
   const pickImage = async () => {
@@ -48,7 +49,7 @@ const Profile = () => {
     console.log("hiiiiiiiiii");
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      quality: 1,
+      quality: 0.5,
       aspect: [1, 1],
     });
 
@@ -56,6 +57,7 @@ const Profile = () => {
 
     if (!result.cancelled) {
       setImg(result.uri);
+      getImgFile(result.uri);
     }
   };
 
@@ -63,7 +65,7 @@ const Profile = () => {
   const translateX = useSharedValue(0);
 
   //show the big image when we click on the small one
-
+  console.log("this is img", img);
   return (
     <>
       <View style={styles.container}>

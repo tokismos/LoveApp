@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -22,6 +22,7 @@ import Neutre from "../assets/moodIcons/neutre.svg";
 import Sick from "../assets/moodIcons/sick.svg";
 import Love from "../assets/moodIcons/love.svg";
 import Heureux from "../assets/moodIcons/heureux.svg";
+import { Context as MoodContext } from "../context/moodContext";
 const SPRING_CONFIG = {
   damping: 80,
   overshootClamping: true,
@@ -33,32 +34,30 @@ const Height = Dimensions.get("window").height;
 const heightMinModal = Height / 5;
 
 const moodSMiley = [
-  { name: "sick", mood: <Sick height={50} width={50} /> },
-  { name: "triste", mood: <Triste height={50} width={50} /> },
-  { name: "neutre", mood: <Neutre height={50} width={50} /> },
-  { name: "heureux", mood: <Heureux height={50} width={50} /> },
-  { name: "love", mood: <Love height={50} width={50} /> },
+  { name: "Sick", mood: <Sick height={50} width={50} /> },
+  { name: "Triste", mood: <Triste height={50} width={50} /> },
+  { name: "Neutre", mood: <Neutre height={50} width={50} /> },
+  { name: "Heureux", mood: <Heureux height={50} width={50} /> },
+  { name: "Love", mood: <Love height={50} width={50} /> },
 ];
 
-const ShowMoodSmiley = () => {
-  return moodSMiley.map((item) => (
-    <TouchableOpacity
-      onPress={() => console.log("you pressed :", item.name)}
-      key={item.name}
-    >
-      {item.mood}
-    </TouchableOpacity>
-  ));
-};
 const Modal = ({ isVisible, setIsVisible }) => {
   const height = useSharedValue(0);
   const [isBig, setIsBig] = useState(false);
-
+  const { selectMood } = useContext(MoodContext);
   const modalStyle = useAnimatedStyle(() => {
     return {
       height: withSpring(height.value, SPRING_CONFIG),
     };
   });
+
+  const ShowMoodSmiley = () => {
+    return moodSMiley.map((item) => (
+      <TouchableOpacity onPress={() => selectMood(item.name)} key={item.name}>
+        {item.mood}
+      </TouchableOpacity>
+    ));
+  };
 
   const eventHandler = useAnimatedGestureHandler({
     onStart: (event, ctx) => {
@@ -115,7 +114,7 @@ const Modal = ({ isVisible, setIsVisible }) => {
             height.value = 0;
           }}
         >
-          <View style={styles.closeView}></View>
+          <View style={styles.closeView} />
         </TouchableWithoutFeedback>
       )}
       <PanGestureHandler onGestureEvent={eventHandler}>
@@ -148,7 +147,7 @@ const styles = StyleSheet.create({
     left: 0,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    elevation: 6,
+    elevation: 7,
   },
   closeView: {
     position: "absolute",
