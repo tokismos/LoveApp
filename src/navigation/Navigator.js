@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { TouchableOpacity, StyleSheet, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
@@ -14,6 +14,7 @@ import SignUpScreen from "../screens/SignUpScreen";
 
 import { auth } from "../helpers/db";
 import { useEffect } from "react/cjs/react.development";
+import { Context as moodContext } from "../context/moodContext";
 
 const AuthStack = createStackNavigator();
 
@@ -68,21 +69,34 @@ const BottomNavigatorScreens = () => {
 
 export default () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [uid, setUserId] = useState(null);
+  const [user, setUser] = useState(false);
   const [splash, setSplash] = useState(true);
+  const { state, syncDbWithContext, getLoverDataFromDb } = useContext(
+    moodContext
+  );
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        setUserId(user.uid);
-        setSplash(false);
+        setUser(true);
+        syncDbWithContext(); //when the auth change(user connect) we fetch data from the db to the current user context
         console.log("there is a user");
       } else {
-        setUserId(null);
+        setUser(false);
         setSplash(false);
       }
     });
   }, []);
+
+  //if there's a user we get the data of the lover from the db and we add it the the context lover then we show the screen:to load everything before
+  useEffect(() => {
+    (async () => {
+      if (auth.currentUser) {
+        await getLoverDataFromDb(state.LoverId); // we did await to wait until it finishes to show the screen
+        setSplash(false);
+      }
+    })();
+  }, [state.LoverId]);
 
   const ModalButton = () => {
     return (
@@ -95,22 +109,19 @@ export default () => {
     );
   };
 
-  const ShowScreen = () => {
-    return splash ? null : uid ? (
-      <>
-        <BottomNavigatorScreens />
-      </>
-    ) : (
-      <AuthStackScreen />
-    );
-  };
   return (
     <>
       <NavigationContainer>
-        <ShowScreen />
+        {splash ? null : user ? (
+          <>
+            <BottomNavigatorScreens />
+            <ModalButton />
+            <Modal isVisible={isVisible} setIsVisible={setIsVisible} />
+          </>
+        ) : (
+          <AuthStackScreen />
+        )}
       </NavigationContainer>
-      <ModalButton />
-      <Modal isVisible={isVisible} setIsVisible={setIsVisible} />
     </>
 
     // <>

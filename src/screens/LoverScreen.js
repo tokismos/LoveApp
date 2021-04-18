@@ -20,13 +20,16 @@ const Lover = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [moodIcon, setMoodIcon] = useState(null);
   const [img, setImg] = useState(imguri);
-  const [moodText, setMoodText] = useState();
+  //const [moodText, setMoodText] = useState();
   const [color, setColor] = useState("red");
-  const { state, loadMood } = useContext(MoodContext);
+  const {
+    state: { CurrentMoodLover, ImgProfileLover, LoverId, IsAvailableLover },
+    getLoverDataFromDb,
+  } = useContext(MoodContext);
 
   // Begin--> Show the icon mood in the screen according to the context currentMood
   const showSmiley = () => {
-    switch (state.currentMood) {
+    switch (CurrentMoodLover) {
       case "Triste":
         return setMoodIcon(<Triste height={50} width={50} />);
       case "Neutre":
@@ -46,32 +49,27 @@ const Lover = () => {
   // end
 
   useEffect(() => {
-    getData(loadMood); // get data from the database and set its value in the context loadMood
-    setMoodText(state.currentMood); // the text mood
+    // getData(loadMood); // get data from the database and set its value in the context loadMood
+    // setMoodText(state.currentMood); // the text mood
+
     showSmiley();
-  }, [state.currentMood]);
+  }, [CurrentMoodLover, LoverId, ImgProfileLover]);
 
   return (
     <View style={styles.container}>
       {/* Show the image when pressed */}
       {isVisible && (
-        <Image
-          source={{ uri: img }}
-          style={{
-            position: "absolute",
-            height: Height,
-            width: Width,
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 1,
-            resizeMode: "contain",
-          }}
-        />
+        <Image source={{ uri: ImgProfileLover }} style={styles.imgView} />
       )}
       <View style={styles.topContainer}>
         {/* Begin--->the circle showing the status in the top left */}
         <View style={styles.statusContainer}>
-          <View style={[styles.statusCircle, { backgroundColor: color }]} />
+          <View
+            style={[
+              styles.statusCircle,
+              { backgroundColor: IsAvailableLover ? "green" : "red" },
+            ]}
+          />
         </View>
         {/* end */}
 
@@ -102,10 +100,10 @@ const Lover = () => {
 
         {/* begin --> image profile view and the smiley face */}
         <View style={styles.imageContainer}>
-          {img && (
+          {ImgProfileLover && (
             <ImgView
               setIsVisible={setIsVisible}
-              img={img}
+              img={ImgProfileLover}
               style={styles.image}
             />
           )}
@@ -116,7 +114,7 @@ const Lover = () => {
         {/* end */}
 
         {/* Begin --> mood text view */}
-        {moodText ? (
+        {CurrentMoodLover ? (
           <View style={styles.moodContainer}>
             <Text
               style={{
@@ -125,7 +123,7 @@ const Lover = () => {
               }}
             >
               {/* Show the text mood */}
-              {moodText}
+              {CurrentMoodLover}
             </Text>
           </View>
         ) : null}
@@ -151,6 +149,15 @@ const Lover = () => {
 export default Lover;
 
 const styles = StyleSheet.create({
+  imgView: {
+    position: "absolute",
+    height: Height,
+    width: Width,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1,
+    resizeMode: "contain",
+  },
   textActivity: {
     fontSize: 15,
     color: "#5d535e",

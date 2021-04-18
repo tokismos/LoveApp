@@ -17,11 +17,15 @@ const db = firebase.database();
 const auth = firebase.auth();
 const storage = firebase.storage();
 
+const setStatus = async (status) => {
+  await db.ref(`users/${auth.currentUser.uid}/IsAvailable`).set(status);
+};
 //Sign up
 const signUp = async (email, password) => {
   await auth.createUserWithEmailAndPassword(email, password);
   db.ref(`users/${auth.currentUser.uid}`).set({
-    Mood: "",
+    CurrentMood: "",
+    LoverId: "",
   });
 };
 const signIn = async (email, password) => {
@@ -34,23 +38,22 @@ const signIn = async (email, password) => {
 };
 
 const getData = async (loadMood) => {
-  await db.ref(`users/${auth.currentUser.uid}/Mood`).on("value", (snapshot) => {
-    const data = snapshot.val();
-    loadMood(data);
-    console.log("Data loaded from getData (db)");
-  });
+  await db
+    .ref(`users/${auth.currentUser.uid}/CurrentMood`)
+    .on("value", (snapshot) => {
+      const data = snapshot.val();
+      loadMood(data);
+    });
 };
 
 const getImgFile = async (uri) => {
   // Create a root reference
-  const storageRef = storage.ref();
   const response = await fetch(uri);
   const blob = await response.blob();
   // Create a reference to 'mountains.jpg'
   const imgRef = storage.ref().child(`images/${auth.currentUser.uid}`);
 
   const tmp = imgRef.put(blob);
-
   tmp.on("state_changed", (snapshot) => {
     // Observe state change events such as progress, pause, and resume
     // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
@@ -60,10 +63,11 @@ const getImgFile = async (uri) => {
 
   imgRef
     .getDownloadURL()
-    .then((url) => {
-      console.log(url);
+    .then(async (url) => {
+      await db.ref(`users/${auth.currentUser.uid}/ImgProfile`).set(url);
+      console.log("added");
     })
     .catch((e) => console.log(e));
 };
 
-export { auth, db, storage, signUp, signIn, getData, getImgFile };
+export { auth, db, setStatus, storage, signUp, signIn, getData, getImgFile };

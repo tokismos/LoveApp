@@ -1,5 +1,5 @@
 import { setStatusBarBackgroundColor } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,36 +8,25 @@ import {
   Dimensions,
   Button,
   Image,
+  Switch,
 } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
-import Animated, {
-  Extrapolate,
-  interpolate,
-  runOnJS,
-  useAnimatedGestureHandler,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated";
-import {
-  LongPressGestureHandler,
-  PanGestureHandler,
-  TapGestureHandler,
-} from "react-native-gesture-handler";
-import { BlurView } from "expo-blur";
 import ImgView from "../components/ImgView";
 import { auth, getImgFile } from "../helpers/db";
+import { Context as moodContext } from "../context/moodContext";
+import SwitchStatus from "../components/SwitchStatus";
 
 const Height = Dimensions.get("screen").height;
 const Width = Dimensions.get("screen").width;
 
-const imguri =
-  "file:/data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FLoveApp-fd9bd671-2d63-4e5e-8ab0-dc5d0fa0605b/ImagePicker/5b019173-61c4-4918-8470-9e4f09e23922.jpg";
 const Profile = () => {
-  console.log("screen profile rerendered");
-  const [img, setImg] = useState(imguri);
+  const [img, setImg] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
+  const {
+    state: { CurrentMood, ImgProfile },
+  } = useContext(moodContext);
+
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -46,14 +35,11 @@ const Profile = () => {
     if (status == "granted") {
       console.log("granted");
     }
-    console.log("hiiiiiiiiii");
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       quality: 0.5,
       aspect: [1, 1],
     });
-
-    console.log(result);
 
     if (!result.cancelled) {
       setImg(result.uri);
@@ -61,18 +47,15 @@ const Profile = () => {
     }
   };
 
-  const scale = useSharedValue(1);
-  const translateX = useSharedValue(0);
-
   //show the big image when we click on the small one
-  console.log("this is img", img);
+
   return (
     <>
       <View style={styles.container}>
         {/* Begin--> show the image in the screen when pressed on */}
         {isVisible && (
           <Image
-            source={{ uri: img }}
+            source={{ uri: ImgProfile }}
             style={{
               position: "absolute",
               height: Height,
@@ -88,11 +71,14 @@ const Profile = () => {
         <View style={styles.topContainer}>
           <ImgView
             setIsVisible={setIsVisible}
-            img={img}
+            img={ImgProfile}
             style={{ borderRadius: 75 }}
           />
+          <SwitchStatus />
+
           <Button title="select Img" onPress={() => pickImage()} />
           <Button title="Log out" onPress={async () => await auth.signOut()} />
+          <Text>Your current mood is {CurrentMood}</Text>
         </View>
         <View style={styles.botBackContainer}>
           <View style={styles.botContainer}></View>
