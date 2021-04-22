@@ -1,7 +1,11 @@
 import createDataContext from "./createDataContext";
-import { db, auth, getDatafromDb } from "../helpers/db";
+import { db, auth, getDatafromDb, firebase, getTime } from "../helpers/db";
 const MoodReducer = (state, action) => {
   switch (action.type) {
+    case "GET_REQUEST":
+      return { ...state, Request: action.payload };
+    case "GET_RESPONSE":
+      return { ...state, Response: action.payload };
     case "SET_MOOD":
       return { ...state, CurrentMood: action.payload };
     case "SELECT_MOOD":
@@ -13,6 +17,7 @@ const MoodReducer = (state, action) => {
         ImgProfile: action.payload.ImgProfile,
         LoverId: action.payload.LoverId,
         IsAvailable: action.payload.IsAvailable,
+        CurrentActivity: action.payload.CurrentActivity,
       };
     case "SYNCLOVER":
       return {
@@ -20,7 +25,11 @@ const MoodReducer = (state, action) => {
         CurrentMoodLover: action.payload.CurrentMoodLover,
         ImgProfileLover: action.payload.ImgProfileLover,
         IsAvailableLover: action.payload.IsAvailableLover,
+        CurrentActivityLover: action.payload.CurrentActivityLover,
+        HistoryLover: action.payload.HistoryLover,
       };
+    case "SELECT_ACTIVITY":
+      return { ...state, CurrentActivity: action.payload.CurrentActivity };
     default:
       return;
   }
@@ -32,10 +41,7 @@ const loadMood = (dispatch) => (mood) => {
 
 // Begin----> fetch data from db and save it in context for the current user
 const syncDbWithContext = (dispatch) => async () => {
-  console.log("before db context");
-
   await db.ref(`users/${auth.currentUser.uid}`).on("value", (snapshot) => {
-    console.log("inside db context");
     const data = snapshot.val();
     dispatch({
       type: "SYNC",
@@ -44,24 +50,52 @@ const syncDbWithContext = (dispatch) => async () => {
         ImgProfile: data.ImgProfile,
         LoverId: data.LoverId,
         IsAvailable: data.IsAvailable,
+        CurrentActivity: data.CurrentActivity,
       },
     });
   });
 };
 //<---- END
 
+const getRequestsFromDb = (dispatch) => async () => {
+  await db
+    .ref(`users/${auth.currentUser.uid}/Requests`)
+    .on("value", (snapshot) => {
+      const data = snapshot.val();
+      console.log("DAATA", data);
+      dispatch({
+        type: "GET_REQUEST",
+        payload: data,
+      });
+    });
+};
+const getResponseFromDb = (dispatch) => async () => {
+  await db
+    .ref(`users/${auth.currentUser.uid}/Responses`)
+    .on("value", (snapshot) => {
+      const data = snapshot.val();
+      console.log("DAATA", data);
+      dispatch({
+        type: "GET_RESPONSE",
+        payload: data,
+      });
+    });
+};
+
 // Begin---->Fetch data of the loverId from the db and add it to the lover context
 const getLoverDataFromDb = (dispatch) => (loverId) => {
   return new Promise(async (resolve, reject) => {
     await db.ref(`users/${loverId}`).on("value", (snapshot) => {
       const data = snapshot.val();
-
+      console.log(data);
       dispatch({
         type: "SYNCLOVER",
         payload: {
           CurrentMoodLover: data.CurrentMood,
           ImgProfileLover: data.ImgProfile,
           IsAvailableLover: data.IsAvailable,
+          CurrentActivityLover: data.CurrentActivity,
+          HistoryLover: data.History,
         },
       });
       resolve();
@@ -70,9 +104,25 @@ const getLoverDataFromDb = (dispatch) => (loverId) => {
 };
 // <---- End
 
+const selectActivity = (dispatch) => async (activity) => {
+  try {
+    await db.ref(`users/${auth.currentUser.uid}/CurrentActivity`).set(activity);
+
+    // const date = new Date();
+    // const time = date.getHours() + " " + date.getMinutes();
+    // console.log("this is time in js", time);
+    // console.log(
+    //   "this is time in firebase",
+    //   firebase.database.ServerValue.TIMESTAMP
+    // );
+    dispatch({ type: "SELECT_ACTIVITY", payload: activity });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const selectMood = (dispatch) => async (mood) => {
   try {
-    console.log(auth.currentUser.uid);
     await db.ref(`users/${auth.currentUser.uid}/CurrentMood`).set(mood);
     dispatch({ type: "SELECT_MOOD", payload: CurrentMood });
     console.log("mood selected");
@@ -85,14 +135,27 @@ const selectMood = (dispatch) => async (mood) => {
 
 export const { Provider, Context } = createDataContext(
   MoodReducer,
-  { selectMood, loadMood, syncDbWithContext, getLoverDataFromDb },
   {
-    CurrentMood: null,
-    ImgProfile: null,
-    LoverId: null,
-    CurrentMoodLover: null,
-    ImgProfileLover: null,
-    IsAvailable: null,
-    IsAvailableLover: null,
+    selectMood,
+    loadMood,
+    syncDbWithContext,
+    getLoverDataFromDb,
+    selectActivity,
+    getRequestsFromDb,
+    getResponseFromDb,
+  },
+  {
+    Response: "",
+    Request: "",
+    CurrentMood: "",
+    ImgProfile: "",
+    LoverId: "",
+    CurrentMoodLover: "",
+    ImgProfileLover: "",
+    IsAvailable: "",
+    IsAvailableLover: "",
+    CurrentActivity: "",
+    CurrentActivityLover: "",
+    HistoryLover: "",
   }
 );

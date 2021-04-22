@@ -68,20 +68,54 @@ const Profile = () => {
           />
         )}
         {/* end */}
+
         <View style={styles.topContainer}>
-          <ImgView
-            setIsVisible={setIsVisible}
-            img={ImgProfile}
-            style={{ borderRadius: 75 }}
-          />
-          <SwitchStatus />
+          <View
+            style={{
+              backgroundColor: "#D3D3D3",
+              marginHorizontal: 20,
+              alignSelf: "stretch",
+              paddingVertical: 20,
+              borderRadius: 20,
+            }}
+          >
+            <ImgView
+              setIsVisible={setIsVisible}
+              img={ImgProfile || null}
+              style={{ borderRadius: 75, alignSelf: "center" }}
+            />
+
+            <View
+              style={{
+                padding: 20,
+                borderRadius: 10,
+              }}
+            >
+              <Text style={{ fontSize: 20 }}>
+                Your current mood is : {CurrentMood}
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              backgroundColor: "blue",
+              alignSelf: "stretch",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <SwitchStatus
+              styles={{
+                justifyContent: "space-between",
+                flex: 1,
+                margin: 20,
+              }}
+            />
+          </View>
 
           <Button title="select Img" onPress={() => pickImage()} />
           <Button title="Log out" onPress={async () => await auth.signOut()} />
-          <Text>Your current mood is {CurrentMood}</Text>
-        </View>
-        <View style={styles.botBackContainer}>
-          <View style={styles.botContainer}></View>
         </View>
       </View>
     </>
@@ -101,21 +135,16 @@ const styles = StyleSheet.create({
   },
   container: { flex: 1 },
   topContainer: {
-    backgroundColor: "blue",
-    height: Height / 2,
+    paddingTop: 40,
     alignItems: "center",
     justifyContent: "center",
-    borderBottomLeftRadius: 70,
   },
 
   botBackContainer: {
-    backgroundColor: "blue",
     flex: 1,
   },
   botContainer: {
     borderTopRightRadius: 75,
     borderRadius: 1,
-
-    backgroundColor: "yellow",
   },
 });

@@ -1,18 +1,29 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-
-const DATA = [
-  { detail: "khadijas is happy", date: "15/04/2021" },
-  { detail: "khadijac is happy", date: "15/04/2021" },
-  { detail: "khadijaz is happy", date: "15/04/2021" },
-  { detail: "khadijca is happy", date: "15/04/2021" },
-  { detail: "khadizja is happy", date: "15/04/2021" },
-  { detail: "khadijcah is happy", date: "15/04/2021" },
-  { detail: "khadaija is happy", date: "15/04/2021" },
-];
+import { Context as moodContext } from "../context/moodContext";
+import ObjToArray from "../helpers/objToArray";
 
 const HistoryList = () => {
+  const {
+    state: { HistoryLover },
+  } = useContext(moodContext);
+
+  const tab = [
+    { key: "1", data: "d" },
+    { key: "4", data: "sf" },
+    { key: "3", data: "da" },
+    { key: "2", data: "s" },
+  ];
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const data = ObjToArray(HistoryLover);
+    setData(data);
+    console.log(data.reverse());
+    tab.push(Math.random());
+  }, [HistoryLover]);
+
   const HistoryListItem = ({ item }) => {
     return (
       <View
@@ -24,8 +35,7 @@ const HistoryList = () => {
           alignItems: "center",
         }}
       >
-        <Text>{item.detail}</Text>
-        <Text> {item.date}</Text>
+        <Text>{item}</Text>
       </View>
     );
   };
@@ -42,9 +52,9 @@ const HistoryList = () => {
             ]}
           />
         )}
-        data={DATA}
-        keyExtractor={(item) => item.detail}
-        renderItem={({ item }) => <HistoryListItem item={item} />}
+        data={data}
+        keyExtractor={(item) => item.key}
+        renderItem={({ item }) => <HistoryListItem item={item.data} />}
       />
     </View>
   );

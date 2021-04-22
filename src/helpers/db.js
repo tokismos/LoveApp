@@ -26,6 +26,11 @@ const signUp = async (email, password) => {
   db.ref(`users/${auth.currentUser.uid}`).set({
     CurrentMood: "",
     LoverId: "",
+    ImgProfile: "",
+    CurrentActivity: "",
+    LoverId: "",
+    IsAvailable: "",
+    History: "",
   });
 };
 const signIn = async (email, password) => {
@@ -70,4 +75,33 @@ const getImgFile = async (uri) => {
     .catch((e) => console.log(e));
 };
 
-export { auth, db, setStatus, storage, signUp, signIn, getData, getImgFile };
+const getTime = () => {
+  return firebase.database.ServerValue.TIMESTAMP;
+};
+
+const setRequest = async (req, loverId) => {
+  await db.ref(`users/${loverId}/Requests`).set(req);
+};
+const resetRequest = async () => {
+  await db.ref(`users/${auth.currentUser.uid}/Requests`).set("");
+};
+
+const setResponse = async (response, loverId) => {
+  await db.ref(`users/${loverId}/Responses`).set(response);
+};
+
+export {
+  auth,
+  firebase,
+  db,
+  resetRequest,
+  setResponse,
+  setStatus,
+  storage,
+  signUp,
+  signIn,
+  getData,
+  setRequest,
+  getTime,
+  getImgFile,
+};

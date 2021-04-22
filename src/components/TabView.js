@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   Dimensions,
+  Button,
 } from "react-native";
 import Animated, {
   Easing,
@@ -12,11 +13,12 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { setRequest } from "../helpers/db";
 import HistoryList from "./HistoryList";
 
 const Width = Dimensions.get("window").width;
 
-const TabView = () => {
+const TabView = ({ loverId }) => {
   const [tabPressed, setTabPressed] = useState(0);
   const left = useSharedValue(20);
 
@@ -31,7 +33,12 @@ const TabView = () => {
 
   const TabViewS = () => {
     if (tabPressed == 0) {
-      return <Text> TAB 0 Pressed</Text>;
+      return (
+        <Button
+          title="send love"
+          onPress={() => setRequest("hiiwii", loverId)}
+        />
+      );
     } else {
       return <HistoryList />;
     }

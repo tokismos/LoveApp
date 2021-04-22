@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Switch } from "react-native";
 import { Context as moodContext } from "../context/moodContext";
 import { setStatus } from "../helpers/db";
 
-const SwitchStatus = () => {
+const SwitchStatus = ({ styles }) => {
   const {
     state: { IsAvailable },
   } = useContext(moodContext);
@@ -16,8 +16,10 @@ const SwitchStatus = () => {
   }, [isEnabled, IsAvailable]);
 
   return (
-    <View style={{ flexDirection: "row" }}>
-      <Text>{!isEnabled ? "Not Available" : "Available"}</Text>
+    <View style={{ flexDirection: "row", ...styles }}>
+      <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+        {!isEnabled ? "Not Available" : "Available"}
+      </Text>
       <Switch
         trackColor={{ true: "#FFA07A", false: "#008000" }}
         thumbColor={isEnabled ? "#556B2F" : "#B22222"}

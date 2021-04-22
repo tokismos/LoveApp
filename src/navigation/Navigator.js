@@ -1,5 +1,13 @@
 import React, { useCallback, useContext, useState } from "react";
-import { TouchableOpacity, StyleSheet, View } from "react-native";
+import {
+  TouchableOpacity,
+  StyleSheet,
+  View,
+  TouchableWithoutFeedback,
+  Text,
+  Button,
+  TouchableHighlight,
+} from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -12,9 +20,12 @@ import Modal from "../components/Modal";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 
-import { auth } from "../helpers/db";
+import { auth, setResponse } from "../helpers/db";
 import { useEffect } from "react/cjs/react.development";
 import { Context as moodContext } from "../context/moodContext";
+import NotificationView from "../components/NotificationView";
+import RequestNotification from "../components/RequestNotification";
+import ResponseNotification from "../components/ResponseNotification";
 
 const AuthStack = createStackNavigator();
 
@@ -69,18 +80,24 @@ const BottomNavigatorScreens = () => {
 
 export default () => {
   const [isVisible, setIsVisible] = useState(false);
+
   const [user, setUser] = useState(false);
   const [splash, setSplash] = useState(true);
-  const { state, syncDbWithContext, getLoverDataFromDb } = useContext(
-    moodContext
-  );
+  const {
+    state,
+    syncDbWithContext,
+    getLoverDataFromDb,
+    getRequestsFromDb,
+    getResponseFromDb,
+  } = useContext(moodContext);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
         setUser(true);
         syncDbWithContext(); //when the auth change(user connect) we fetch data from the db to the current user context
-        console.log("there is a user");
+        getRequestsFromDb();
+        getResponseFromDb();
       } else {
         setUser(false);
         setSplash(false);
@@ -97,6 +114,8 @@ export default () => {
       }
     })();
   }, [state.LoverId]);
+  console.log("this is reeeeeeeeeeeesponse", state.Response);
+  //we see the notification when the value of Request changes
 
   const ModalButton = () => {
     return (
@@ -111,6 +130,12 @@ export default () => {
 
   return (
     <>
+      {/* Begin---> If you have a notification it will show the notif or the button */}
+      {state.Response != "" && <ResponseNotification />}
+      {state.Request != "" && <RequestNotification />}
+
+      {/* END */}
+
       <NavigationContainer>
         {splash ? null : user ? (
           <>

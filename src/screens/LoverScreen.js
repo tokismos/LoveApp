@@ -23,7 +23,13 @@ const Lover = () => {
   //const [moodText, setMoodText] = useState();
   const [color, setColor] = useState("red");
   const {
-    state: { CurrentMoodLover, ImgProfileLover, LoverId, IsAvailableLover },
+    state: {
+      CurrentMoodLover,
+      ImgProfileLover,
+      LoverId,
+      IsAvailableLover,
+      CurrentActivityLover,
+    },
     getLoverDataFromDb,
   } = useContext(MoodContext);
 
@@ -100,7 +106,7 @@ const Lover = () => {
 
         {/* begin --> image profile view and the smiley face */}
         <View style={styles.imageContainer}>
-          {ImgProfileLover && (
+          {ImgProfileLover !== "" && (
             <ImgView
               setIsVisible={setIsVisible}
               img={ImgProfileLover}
@@ -114,7 +120,7 @@ const Lover = () => {
         {/* end */}
 
         {/* Begin --> mood text view */}
-        {CurrentMoodLover ? (
+        {CurrentMoodLover != "" ? (
           <View style={styles.moodContainer}>
             <Text
               style={{
@@ -128,17 +134,16 @@ const Lover = () => {
           </View>
         ) : null}
         {/* end */}
-
         {/* Begin--> Activity view  */}
         <View style={styles.activityContainer}>
-          <Text style={styles.textActivity}>Khadija is with her dad</Text>
+          <Text style={styles.textActivity}>{CurrentActivityLover}</Text>
         </View>
         {/* end */}
       </View>
       {/* Begin -->the bottom half */}
       <View style={styles.botBackContainer}>
         <View style={styles.botContainer}>
-          <TabView />
+          <TabView loverId={LoverId} />
         </View>
       </View>
       {/* end */}

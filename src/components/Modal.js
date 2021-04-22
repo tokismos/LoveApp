@@ -78,8 +78,6 @@ const Modal = ({ isVisible, setIsVisible }) => {
     },
     onEnd: (event, ctx) => {
       if (event.translationY < -Height / 5) {
-        console.log("thiiis");
-
         height.value = Height - 200;
         runOnJS(setIsBig)(true);
       } else if (event.translationY > Height / 5) {

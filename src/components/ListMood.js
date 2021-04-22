@@ -1,6 +1,7 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useContext } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
+import { Context as moodContext } from "../context/moodContext";
 
 const ListView = ({ item }) => {
   return (
@@ -11,13 +12,15 @@ const ListView = ({ item }) => {
 };
 
 const ListMood = () => {
+  const { selectActivity } = useContext(moodContext);
+
   const moods = [
-    "happy",
-    "sad",
-    "yeaay",
-    "in Love",
-    "happye",
-    "sadd",
+    "i am happy",
+    "I am with Dad",
+    "I am with family",
+    "I am eating",
+    "I am with hanae",
+    "i am watching a movie",
     "yeaayas",
     "in Lovecx",
     "happyvc",
@@ -34,7 +37,15 @@ const ListMood = () => {
       <FlatList
         data={moods}
         keyExtractor={(item) => item}
-        renderItem={({ item }) => <ListView item={item} />}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => {
+              selectActivity(item);
+            }}
+          >
+            <ListView item={item} />
+          </TouchableOpacity>
+        )}
       />
     </View>
   );
