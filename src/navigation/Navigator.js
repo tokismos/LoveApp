@@ -131,7 +131,9 @@ export default () => {
   return (
     <>
       {/* Begin---> If you have a notification it will show the notif or the button */}
-      {state.Response != "" && <ResponseNotification />}
+      {state.Response != "" && (
+        <ResponseNotification response={state.Response} />
+      )}
       {state.Request != "" && <RequestNotification />}
 
       {/* END */}

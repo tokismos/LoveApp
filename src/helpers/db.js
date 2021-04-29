@@ -85,6 +85,9 @@ const setRequest = async (req, loverId) => {
 const resetRequest = async () => {
   await db.ref(`users/${auth.currentUser.uid}/Requests`).set("");
 };
+const resetResponse = async () => {
+  await db.ref(`users/${auth.currentUser.uid}/Responses`).set("");
+};
 
 const setResponse = async (response, loverId) => {
   await db.ref(`users/${loverId}/Responses`).set(response);
@@ -95,6 +98,7 @@ export {
   firebase,
   db,
   resetRequest,
+  resetResponse,
   setResponse,
   setStatus,
   storage,
