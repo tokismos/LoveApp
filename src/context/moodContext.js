@@ -29,7 +29,7 @@ const MoodReducer = (state, action) => {
         HistoryLover: action.payload.HistoryLover,
       };
     case "SELECT_ACTIVITY":
-      return { ...state, CurrentActivity: action.payload.CurrentActivity };
+      return { ...state, CurrentActivity: action.payload };
     default:
       return;
   }

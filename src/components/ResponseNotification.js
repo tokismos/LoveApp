@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
-  Text,
   View,
   TouchableWithoutFeedback,
   Dimensions,
@@ -15,7 +14,7 @@ import NotificationView from "./NotificationView";
 import LottieView from "lottie-react-native";
 import CloseIcon from "../assets/icons/close.svg";
 import { resetResponse } from "../helpers/db";
-
+import TextStyled from "./TextStyled";
 const Height = Dimensions.get("screen").height;
 
 const ResponseNotification = ({ response }) => {
@@ -41,12 +40,31 @@ const ResponseNotification = ({ response }) => {
           />
 
           <View style={{ marginHorizontal: 10 }}>
-            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-              Khadija accepted your request:
-            </Text>
+            <TextStyled
+              style={{
+                textAlign: "center",
+                fontSize: 16,
+              }}
+              bold
+            >
+              Khadija accepted your request :
+            </TextStyled>
           </View>
-          <View style={{ marginTop: 10, marginHorizontal: 20 }}>
-            <Text style={{ fontStyle: "italic" }}>"{response.msg}"</Text>
+          <View
+            style={{
+              marginTop: 10,
+              marginHorizontal: 20,
+            }}
+          >
+            <TextStyled
+              style={{
+                textAlign: "center",
+                fontSize: 16,
+              }}
+              italic
+            >
+              "{response.msg}"
+            </TextStyled>
           </View>
         </>
       );
@@ -64,12 +82,14 @@ const ResponseNotification = ({ response }) => {
           />
 
           <View style={{ marginHorizontal: 10 }}>
-            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+            <TextStyled style={{ textAlign: "center", fontSize: 16 }} bold>
               Khadija refused your request:
-            </Text>
+            </TextStyled>
           </View>
           <View style={{ marginTop: 10, marginHorizontal: 20 }}>
-            <Text style={{ fontStyle: "italic" }}>"{response.msg}"</Text>
+            <TextStyled style={{ fontSize: 16, textAlign: "center" }} italic>
+              "{response.msg}"
+            </TextStyled>
           </View>
         </>
       );

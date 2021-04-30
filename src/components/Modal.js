@@ -117,9 +117,31 @@ const Modal = ({ isVisible, setIsVisible }) => {
       )}
       <PanGestureHandler onGestureEvent={eventHandler}>
         <Animated.View style={[styles.modalView, modalStyle]}>
+          <View
+            style={{
+              height: 3,
+              backgroundColor: "#777",
+              marginTop: 10,
+              width: 40,
+
+              borderRadius: 20,
+              alignSelf: "center",
+            }}
+          />
           <View style={styles.moodView}>
             <ShowMoodSmiley />
           </View>
+          <View
+            style={{
+              height: 1,
+              backgroundColor: "#777",
+              marginTop: 10,
+              width: "100%",
+
+              borderRadius: 20,
+              alignSelf: "center",
+            }}
+          />
           <ListMood />
         </Animated.View>
       </PanGestureHandler>
@@ -132,7 +154,7 @@ export default Modal;
 const styles = StyleSheet.create({
   moodView: {
     alignItems: "center",
-    height: 150,
+    height: 120,
     flexDirection: "row",
     justifyContent: "space-between",
     marginHorizontal: 20,

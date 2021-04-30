@@ -2,11 +2,12 @@ import React, { useContext } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Context as moodContext } from "../context/moodContext";
+import TextStyled from "./TextStyled";
 
 const ListView = ({ item }) => {
   return (
     <View style={styles.listContainer}>
-      <Text>{item}</Text>
+      <TextStyled>{item}</TextStyled>
     </View>
   );
 };

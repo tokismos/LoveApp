@@ -33,7 +33,7 @@ const NotificationView = ({ isNotifOpen, setIsNotifOpen, msg, children }) => {
     if (isNotifOpen) {
       top.value = 40;
     } else {
-      top.value = -100;
+      top.value = -200;
     }
   }, [isNotifOpen]);
   return (
@@ -41,7 +41,6 @@ const NotificationView = ({ isNotifOpen, setIsNotifOpen, msg, children }) => {
       <Animated.View
         style={[
           {
-            height: 50,
             left: 0,
             right: 0,
             position: "absolute",
@@ -50,6 +49,8 @@ const NotificationView = ({ isNotifOpen, setIsNotifOpen, msg, children }) => {
             justifyContent: "center",
             margin: 10,
             borderRadius: 10,
+            borderWidth: 1,
+            elevation: 20,
           },
           animatedStyle,
         ]}

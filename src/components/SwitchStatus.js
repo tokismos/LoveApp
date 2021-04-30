@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Text, View, Switch } from "react-native";
+import { StyleSheet, View, Switch } from "react-native";
 import { Context as moodContext } from "../context/moodContext";
 import { setStatus } from "../helpers/db";
+import Text from "./TextStyled";
 
 const SwitchStatus = ({ styles }) => {
   const {
@@ -17,7 +18,7 @@ const SwitchStatus = ({ styles }) => {
 
   return (
     <View style={{ flexDirection: "row", ...styles }}>
-      <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+      <Text style={{ fontSize: 17 }} bold>
         {!isEnabled ? "Not Available" : "Available"}
       </Text>
       <Switch

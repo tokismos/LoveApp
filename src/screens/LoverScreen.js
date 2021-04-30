@@ -11,6 +11,7 @@ import ImgView from "../components/ImgView";
 import TabView from "../components/TabView";
 import { Context as MoodContext } from "../context/moodContext";
 import { getData } from "../helpers/db";
+import TextStyled from "../components/TextStyled";
 
 const Width = Dimensions.get("window").width;
 const Height = Dimensions.get("window").height;
@@ -61,6 +62,7 @@ const Lover = () => {
     showSmiley();
   }, [CurrentMoodLover, LoverId, ImgProfileLover]);
 
+  console.log("heeeeeereendnnered");
   return (
     <View style={styles.container}>
       {/* Show the image when pressed */}
@@ -122,21 +124,24 @@ const Lover = () => {
         {/* Begin --> mood text view */}
         {CurrentMoodLover != "" ? (
           <View style={styles.moodContainer}>
-            <Text
+            <TextStyled
               style={{
-                fontWeight: "bold",
                 color: "red",
+                fontSize: 15,
               }}
+              bold
             >
               {/* Show the text mood */}
               {CurrentMoodLover}
-            </Text>
+            </TextStyled>
           </View>
         ) : null}
         {/* end */}
         {/* Begin--> Activity view  */}
         <View style={styles.activityContainer}>
-          <Text style={styles.textActivity}>{CurrentActivityLover}</Text>
+          <TextStyled style={styles.textActivity} italic>
+            {CurrentActivityLover}
+          </TextStyled>
         </View>
         {/* end */}
       </View>
@@ -166,7 +171,6 @@ const styles = StyleSheet.create({
   textActivity: {
     fontSize: 15,
     color: "#5d535e",
-    fontStyle: "italic",
   },
   activityContainer: {
     flexDirection: "row",

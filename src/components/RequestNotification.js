@@ -1,16 +1,26 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Context as moodContext } from "../context/moodContext";
 import NotificationView from "./NotificationView";
 import LottieView from "lottie-react-native";
 import { resetRequest, setResponse } from "../helpers/db";
-
+import Accept from "../assets/icons/accept.svg";
+import Refuse from "../assets/icons/refuse.svg";
+import TextStyled from "./TextStyled";
 const RequestNotification = () => {
   const { state } = useContext(moodContext);
   const [isNotifOpen, setIsNotifOpen] = useState(true);
 
   useEffect(() => {
     setIsNotifOpen(true);
+    setTimeout(() => setIsNotifOpen(false), 3000);
   }, [state.Request]);
 
   const pressButtonNotif = (res) => {
@@ -31,25 +41,53 @@ const RequestNotification = () => {
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            marginHorizontal: 20,
+            margin: 1,
+            backgroundColor: "#DCDCDC",
+            borderRadius: 10,
           }}
         >
-          <Text>{state.Request} </Text>
-          <View style={{ flexDirection: "row" }}>
-            <View style={{ marginHorizontal: 15 }}>
-              <Button
-                title="yes"
-                onPress={() => {
-                  pressButtonNotif("YES");
-                }}
-              />
-            </View>
-            <Button
-              title="no"
+          <View
+            style={{
+              marginLeft: 10,
+              width: "60%",
+              marginVertical: 5,
+            }}
+          >
+            <TextStyled
+              style={{
+                fontSize: 18,
+                alignSelf: "center",
+              }}
+              italic
+            >
+              {state.Request}
+            </TextStyled>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              paddingVertical: 10,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                pressButtonNotif("YES");
+                ToastAndroid.show("Request accepted !", ToastAndroid.SHORT);
+              }}
+              style={{ marginHorizontal: 5 }}
+            >
+              <Accept height={40} width={40} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
               onPress={() => {
                 pressButtonNotif("NO");
+                ToastAndroid.show("Request refused !", ToastAndroid.SHORT);
               }}
-            />
+              style={{ marginHorizontal: 5 }}
+            >
+              <Refuse height={40} width={40} />
+            </TouchableOpacity>
           </View>
         </View>
 

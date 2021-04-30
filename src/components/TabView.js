@@ -14,7 +14,9 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { setRequest } from "../helpers/db";
+import ActionList from "./ActionList";
 import HistoryList from "./HistoryList";
+import TextStyled from "./TextStyled";
 
 const Width = Dimensions.get("window").width;
 
@@ -33,12 +35,7 @@ const TabView = ({ loverId }) => {
 
   const TabViewS = () => {
     if (tabPressed == 0) {
-      return (
-        <Button
-          title="send love"
-          onPress={() => setRequest("hiiwii", loverId)}
-        />
-      );
+      return <ActionList />;
     } else {
       return <HistoryList />;
     }
@@ -56,7 +53,7 @@ const TabView = ({ loverId }) => {
 
               marginLeft: Width / 23,
               width: Width / 4,
-              top: "25%",
+              top: "30%",
               zIndex: -1,
             },
             buttonStyle,
@@ -73,14 +70,15 @@ const TabView = ({ loverId }) => {
             justifyContent: "center",
           }}
         >
-          <Text
-            style={[
-              styles.titleTab,
-              { color: tabPressed == 0 ? "#dfe166" : "black" },
-            ]}
+          <TextStyled
+            style={{
+              color: tabPressed == 0 ? "#dfe166" : "black",
+              fontSize: 16,
+            }}
+            bold
           >
             Actions
-          </Text>
+          </TextStyled>
         </TouchableOpacity>
         <View
           style={{
@@ -103,19 +101,20 @@ const TabView = ({ loverId }) => {
             justifyContent: "center",
           }}
         >
-          <Text
-            style={[
-              styles.titleTab,
-              { color: tabPressed == 1 ? "#dfe166" : "black" },
-            ]}
+          <TextStyled
+            style={{
+              color: tabPressed == 1 ? "#dfe166" : "black",
+              fontSize: 16,
+            }}
+            bold
           >
             History
-          </Text>
+          </TextStyled>
         </TouchableOpacity>
       </View>
       <View
         style={{
-          backgroundColor: "#9a9eab",
+          borderWidth: 1,
           height: 200,
           marginHorizontal: 20,
         }}

@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useState } from "react";
 import {
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
   View,
   TouchableWithoutFeedback,
   Text,
@@ -26,6 +27,7 @@ import { Context as moodContext } from "../context/moodContext";
 import NotificationView from "../components/NotificationView";
 import RequestNotification from "../components/RequestNotification";
 import ResponseNotification from "../components/ResponseNotification";
+import Toast from "react-native-toast-message";
 
 const AuthStack = createStackNavigator();
 
@@ -53,15 +55,15 @@ const BottomNavigatorScreens = () => {
 
           if (route.name === "LoverScreen") {
             iconName = focused ? (
-              <IMGLOVER width={45} height={45} fill="red" />
+              <IMGLOVER width={45} height={45} fill="#B22222" />
             ) : (
-              <IMGLOVER width={45} height={45} fill="#000" />
+              <IMGLOVER width={45} height={45} fill="#555" />
             );
           } else if (route.name === "ProfileScreen") {
             iconName = focused ? (
-              <IMGPROFILE width={43} height={43} fill="red" />
+              <IMGPROFILE width={43} height={43} fill="#B22222" />
             ) : (
-              <IMGPROFILE width={43} height={43} fill="#000" />
+              <IMGPROFILE width={43} height={43} fill="#555" />
             );
           }
           return iconName;
@@ -139,7 +141,11 @@ export default () => {
       {/* END */}
 
       <NavigationContainer>
-        {splash ? null : user ? (
+        {splash ? (
+          <View style={{ flex: 1, justifyContent: "center" }}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        ) : user ? (
           <>
             <BottomNavigatorScreens />
             <ModalButton />
@@ -167,13 +173,14 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     borderRadius: 20,
+    position: "absolute",
   },
   modalButton: {
     position: "absolute",
     height: 80,
     width: 80,
     borderRadius: 40,
-    backgroundColor: "red",
+    backgroundColor: "#B22222",
     bottom: 30,
     alignSelf: "center",
     elevation: 6,
