@@ -2,6 +2,11 @@ import createDataContext from "./createDataContext";
 import { db, auth, getDatafromDb, firebase, getTime } from "../helpers/db";
 const MoodReducer = (state, action) => {
   switch (action.type) {
+    case "ADD_HISTORY":
+      return {
+        ...state,
+        HistoryLover: action.payload,
+      };
     case "GET_REQUEST":
       return { ...state, Request: action.payload };
     case "GET_RESPONSE":
@@ -107,7 +112,8 @@ const getLoverDataFromDb = (dispatch) => (loverId) => {
 const selectActivity = (dispatch) => async (activity) => {
   try {
     await db.ref(`users/${auth.currentUser.uid}/CurrentActivity`).set(activity);
-
+    await db.ref(`users/${auth.currentUser.uid}/History`).push(activity);
+    dispatch({ type: "ADD_HISTORY", payload: history });
     // const date = new Date();
     // const time = date.getHours() + " " + date.getMinutes();
     // console.log("this is time in js", time);
@@ -124,8 +130,20 @@ const selectActivity = (dispatch) => async (activity) => {
 const selectMood = (dispatch) => async (mood) => {
   try {
     await db.ref(`users/${auth.currentUser.uid}/CurrentMood`).set(mood);
+    await db.ref(`users/${auth.currentUser.uid}/History`).push(mood);
     dispatch({ type: "SELECT_MOOD", payload: CurrentMood });
     console.log("mood selected");
+    //  if (isAuto) await AsyncStorage.setItem("uid", result.user.uid);
+  } catch (err) {
+    //    dispatch({ type: "ADD_ERROR", payload: err });
+  }
+  //dispatch({ type: "IS_LOADING", payload: false });
+};
+const addToHistory = (dispatch) => async (history) => {
+  try {
+    await db.ref(`users/${auth.currentUser.uid}/History`).push(history);
+    dispatch({ type: "ADD_HISTORY", payload: history });
+    console.log("history added");
     //  if (isAuto) await AsyncStorage.setItem("uid", result.user.uid);
   } catch (err) {
     //    dispatch({ type: "ADD_ERROR", payload: err });
@@ -143,6 +161,7 @@ export const { Provider, Context } = createDataContext(
     selectActivity,
     getRequestsFromDb,
     getResponseFromDb,
+    addToHistory,
   },
   {
     Response: "",

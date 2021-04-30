@@ -122,6 +122,7 @@ export default () => {
   const ModalButton = () => {
     return (
       <TouchableOpacity
+        activeOpacity={0.8}
         onPress={() => {
           setIsVisible(true);
         }}

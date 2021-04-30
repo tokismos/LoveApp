@@ -9,19 +9,11 @@ const HistoryList = () => {
     state: { HistoryLover },
   } = useContext(moodContext);
 
-  const tab = [
-    { key: "1", data: "d" },
-    { key: "4", data: "sf" },
-    { key: "3", data: "da" },
-    { key: "2", data: "s" },
-  ];
   const [data, setData] = useState([]);
 
   useEffect(() => {
     const data = ObjToArray(HistoryLover);
-    setData(data);
-    console.log(data.reverse());
-    tab.push(Math.random());
+    setData(data.reverse());
   }, [HistoryLover]);
 
   const HistoryListItem = ({ item }) => {

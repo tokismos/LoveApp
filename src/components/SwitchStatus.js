@@ -22,11 +22,10 @@ const SwitchStatus = ({ styles }) => {
         {!isEnabled ? "Not Available" : "Available"}
       </Text>
       <Switch
-        trackColor={{ true: "#FFA07A", false: "#008000" }}
+        trackColor={{ true: "#008000", false: "#FFA07A" }}
         thumbColor={isEnabled ? "#556B2F" : "#B22222"}
-        ios_backgroundColor="#3e3e3e"
         onValueChange={toggleSwitch}
-        value={!isEnabled}
+        value={isEnabled}
         style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }] }}
       />
     </View>
