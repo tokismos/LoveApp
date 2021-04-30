@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Navigator from "./src/navigation/Navigator";
 import { db, auth } from "./src/helpers/db";
@@ -12,6 +12,7 @@ import { LogBox } from "react-native";
 import Toast from "react-native-toast-message";
 
 LogBox.ignoreLogs(["Setting a timer"]);
+
 export default function App() {
   let [fontsLoaded] = useFonts({
     Raleway: require("./src/assets/fonts/Raleway-Regular.ttf"),
