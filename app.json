@@ -1,21 +1,16 @@
 {
   "expo": {
-    "name": "LoveApp",
-    "slug": "LoveApp",
+    "name": "Moody",
+    "slug": "Moody",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "updates": {
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -24,7 +19,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.loveApp"
+      "googleServicesFile": "./google-services.json",
+      "package": "com.tokismos.moody"
     },
     "web": {
       "favicon": "./assets/favicon.png"

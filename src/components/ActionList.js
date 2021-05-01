@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-import { StyleSheet, Text, View, FlatList, ToastAndroid } from "react-native";
+import { StyleSheet, View, FlatList, ToastAndroid } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import Toast from "react-native-toast-message";
 import Arrow from "../assets/icons/rightArrow.svg";
 import { Context as moodContext } from "../context/moodContext";
 import { setRequest } from "../helpers/db";
+import sendNotification from "../helpers/sendNotification";
 import TextStyled from "./TextStyled";
 const DATA = [
   "Are you hungry ?",
@@ -35,7 +35,7 @@ const ActionListItem = ({ item }) => {
 
 const ActionList = () => {
   const {
-    state: { LoverId },
+    state: { LoverId, ExpoLoverNotif },
   } = useContext(moodContext);
   return (
     <View style={{ flex: 1 }}>
@@ -56,7 +56,14 @@ const ActionList = () => {
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => {
-              setRequest(item, LoverId);
+              setRequest(
+                item,
+                LoverId,
+                sendNotification(
+                  ExpoLoverNotif,
+                  "Your partner sent you a demand !"
+                )
+              );
               ToastAndroid.show("Request sent !!", ToastAndroid.SHORT);
             }}
           >

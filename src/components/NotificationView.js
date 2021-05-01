@@ -1,24 +1,11 @@
-import React, { useContext } from "react";
-import {
-  Button,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import React, { useEffect } from "react";
+import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { useEffect } from "react/cjs/react.development";
-import { Context as moodContext } from "../context/moodContext";
-import { setResponse } from "../helpers/db";
 const NotificationView = ({ isNotifOpen, setIsNotifOpen, msg, children }) => {
-  const {
-    state: { Requests, LoverId },
-  } = useContext(moodContext);
-
   const top = useSharedValue(-100);
   const animatedStyle = useAnimatedStyle(() => {
     return {

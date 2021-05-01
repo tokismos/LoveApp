@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Text, View, Dimensions, Image } from "react-native";
+import { StyleSheet, View, Dimensions, Image } from "react-native";
 
 import Triste from "../assets/moodIcons/triste.svg";
 import Neutre from "../assets/moodIcons/neutre.svg";
@@ -10,19 +10,14 @@ import Bouquet from "../assets/bouquet.svg";
 import ImgView from "../components/ImgView";
 import TabView from "../components/TabView";
 import { Context as MoodContext } from "../context/moodContext";
-import { getData } from "../helpers/db";
 import TextStyled from "../components/TextStyled";
 
 const Width = Dimensions.get("window").width;
 const Height = Dimensions.get("window").height;
-const imguri =
-  "https://firebasestorage.googleapis.com/v0/b/loveapp-69783.appspot.com/o/images%2FEJa8ybCCvdepFogqHILHayDqM8H2?alt=media&token=ecf3688a-7252-40b0-96c5-b22e87f36e0e";
 const Lover = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [moodIcon, setMoodIcon] = useState(null);
-  const [img, setImg] = useState(imguri);
   //const [moodText, setMoodText] = useState();
-  const [color, setColor] = useState("red");
   const {
     state: {
       CurrentMoodLover,
@@ -31,21 +26,18 @@ const Lover = () => {
       IsAvailableLover,
       CurrentActivityLover,
     },
-    getLoverDataFromDb,
   } = useContext(MoodContext);
 
   // Begin--> Show the icon mood in the screen according to the context currentMood
   const showSmiley = () => {
     switch (CurrentMoodLover) {
-      case "Triste":
+      case "Sad":
         return setMoodIcon(<Triste height={50} width={50} />);
       case "Neutre":
         return setMoodIcon(<Neutre height={50} width={50} />);
       case "Sick":
         return setMoodIcon(<Sick height={50} width={50} />);
-      case "Triste":
-        return setMoodIcon(<Triste height={50} width={50} />);
-      case "Heureux":
+      case "Happy":
         return setMoodIcon(<Heureux height={50} width={50} />);
       case "Love":
         return setMoodIcon(<Love height={50} width={50} />);
@@ -62,7 +54,6 @@ const Lover = () => {
     showSmiley();
   }, [CurrentMoodLover, LoverId, ImgProfileLover]);
 
-  console.log("heeeeeereendnnered");
   return (
     <View style={styles.container}>
       {/* Show the image when pressed */}

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "917758956918",
+    "project_id": "moody-6079f",
+    "storage_bucket": "moody-6079f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917758956918:android:4626f643f2aa23121a5657",
+        "android_client_info": {
+          "package_name": "com.tokismos.moody"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "917758956918-feiovdbe1u50k8u0mgm3oo0pc5tu0qns.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB40SKPmIUTg3-eoobapefzMJG9hKgaJQQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "917758956918-feiovdbe1u50k8u0mgm3oo0pc5tu0qns.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

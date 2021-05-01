@@ -1,20 +1,7 @@
-import React, { useContext } from "react";
-import {
-  Dimensions,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { Context as moodContext } from "../context/moodContext";
+import React from "react";
+import { Image, StyleSheet, TouchableHighlight, View } from "react-native";
 
 const ImgView = ({ img, style, setIsVisible }) => {
-  const {
-    state: { ImgProfile },
-  } = useContext(moodContext);
-
   return (
     <View style={[styles.image, { ...style }]}>
       {img && (

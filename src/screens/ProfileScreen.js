@@ -1,13 +1,10 @@
-import { setStatusBarBackgroundColor } from "expo-status-bar";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   StyleSheet,
   View,
   TouchableOpacity,
   Dimensions,
-  Button,
   Image,
-  Switch,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -16,7 +13,6 @@ import ImgView from "../components/ImgView";
 import { auth, getImgFile } from "../helpers/db";
 import { Context as moodContext } from "../context/moodContext";
 import SwitchStatus from "../components/SwitchStatus";
-import LogoutIcon from "../assets/icons/logout.svg";
 import Text from "../components/TextStyled";
 import RightArrow from "../assets/icons/rightArrow.svg";
 const Height = Dimensions.get("screen").height;
@@ -57,7 +53,7 @@ const Profile = () => {
         {/* Begin--> show the image in the screen when pressed on */}
         {isVisible && (
           <Image
-            source={{ uri: ImgProfile }}
+            source={{ uri: img || ImgProfile }}
             style={{
               position: "absolute",
               height: Height,

@@ -1,18 +1,16 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
   View,
-  TouchableWithoutFeedback,
-  Text,
-  Button,
-  TouchableHighlight,
+  Alert,
 } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
+import Constants from "expo-constants";
+import * as Notifications from "expo-notifications";
 import LoverScreen from "../screens/LoverScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import IMGLOVER from "../assets/icons/lover.svg";
@@ -21,13 +19,10 @@ import Modal from "../components/Modal";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 
-import { auth, setResponse } from "../helpers/db";
-import { useEffect } from "react/cjs/react.development";
+import { auth, db } from "../helpers/db";
 import { Context as moodContext } from "../context/moodContext";
-import NotificationView from "../components/NotificationView";
 import RequestNotification from "../components/RequestNotification";
 import ResponseNotification from "../components/ResponseNotification";
-import Toast from "react-native-toast-message";
 
 const AuthStack = createStackNavigator();
 
@@ -38,8 +33,8 @@ const AuthStackScreen = () => {
         headerShown: false,
       }}
     >
-      <AuthStack.Screen name="SignUp" component={SignUpScreen} />
       <AuthStack.Screen name="SignIn" component={SignInScreen} />
+      <AuthStack.Screen name="SignUp" component={SignUpScreen} />
     </AuthStack.Navigator>
   );
 };
@@ -85,21 +80,51 @@ export default () => {
 
   const [user, setUser] = useState(false);
   const [splash, setSplash] = useState(true);
-  const {
-    state,
-    syncDbWithContext,
-    getLoverDataFromDb,
-    getRequestsFromDb,
-    getResponseFromDb,
-  } = useContext(moodContext);
+  const { state, syncDbWithContext, getLoverDataFromDb } = useContext(
+    moodContext
+  );
 
+  const registerForPushNotificationsAsync = async (uid) => {
+    let token;
+    if (Constants.isDevice) {
+      const {
+        status: existingStatus,
+      } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== "granted") {
+        alert("Failed to get push token for push notification!");
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      Alert.alert(`this is the token ${token}`);
+      await db.ref(`users/${uid}/ExpoNotification`).set(token);
+
+      console.log(token);
+    } else {
+      alert("Must use physical device for Push Notifications");
+    }
+
+    if (Platform.OS === "android") {
+      Notifications.setNotificationChannelAsync("default", {
+        name: "default",
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: "#FF231F7C",
+      });
+    }
+
+    return token;
+  };
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
         setUser(true);
         syncDbWithContext(); //when the auth change(user connect) we fetch data from the db to the current user context
-        getRequestsFromDb();
-        getResponseFromDb();
+        registerForPushNotificationsAsync(user.uid);
       } else {
         setUser(false);
         setSplash(false);
@@ -112,11 +137,11 @@ export default () => {
     (async () => {
       if (auth.currentUser) {
         await getLoverDataFromDb(state.LoverId); // we did await to wait until it finishes to show the screen
+
         setSplash(false);
       }
     })();
   }, [state.LoverId]);
-  console.log("this is reeeeeeeeeeeesponse", state.Response);
   //we see the notification when the value of Request changes
 
   const ModalButton = () => {
@@ -157,14 +182,6 @@ export default () => {
         )}
       </NavigationContainer>
     </>
-
-    // <>
-    //   <NavigationContainer>
-    //     <BottomNavigatorScreens />
-    //   </NavigationContainer>
-    //   <ModalButton />
-    //   <Modal isVisible={isVisible} setIsVisible={setIsVisible} />
-    // </>
   );
 };
 

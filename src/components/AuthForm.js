@@ -1,20 +1,16 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
   Button,
-  Switch,
   ActivityIndicator,
 } from "react-native";
-// import { Context as AuthContext } from "../context/AuthContext";
 
 const AuthForm = ({ title, onSubmit, isSignInScreen }) => {
   const [email, setEmail] = useState("tokis@gmail.com");
   const [password, setPassword] = useState("testtest");
-  //   const { state } = useContext(AuthContext);
-  const [isAuto, setIsAuto] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -34,33 +30,13 @@ const AuthForm = ({ title, onSubmit, isSignInScreen }) => {
           onChangeText={setPassword}
           secureTextEntry
         />
-        {
-          //show the switch of auto login if we are in the signin screen
-          //   isSignInScreen ? (
-          //     <View style={styles.autoLogin}>
-          //       <Text>Stay Logged ?</Text>
-          //       <Switch
-          //         trackColor={{ false: "#767577", true: "#81b0ff" }}
-          //         thumbColor={isAuto ? "#f5dd4b" : "#f4f3f4"}
-          //         onValueChange={() => setIsAuto((value) => !value)}
-          //         value={isAuto}
-          //       />
-          //     </View>
-          //   ) : null
-        }
-        {/* {state.error ? (
-          <Text style={{ color: "red" }}>{state.error.message}</Text>
-        ) : null} */}
+
         <View style={styles.button}>
-          {/* {state.isLoading ? (
-            <ActivityIndicator size="large" color="#0000ff" />
-          ) : ( */}
           {isLoading ? (
             <ActivityIndicator size="large" color="#0000ff" />
           ) : (
             <Button title={title} onPress={() => onSubmit(email, password)} />
           )}
-          {/* )} */}
         </View>
       </View>
     </View>

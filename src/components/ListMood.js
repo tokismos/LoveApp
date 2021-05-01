@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, ToastAndroid, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Context as moodContext } from "../context/moodContext";
+import sendNotification from "../helpers/sendNotification";
 import TextStyled from "./TextStyled";
 
 const ListView = ({ item }) => {
@@ -12,36 +13,45 @@ const ListView = ({ item }) => {
   );
 };
 
-const ListMood = () => {
-  const { selectActivity } = useContext(moodContext);
+const ListMood = ({ setIsVisible }) => {
+  const {
+    selectActivity,
+    state: { ExpoLoverNotif },
+  } = useContext(moodContext);
 
   const moods = [
-    "i am happy",
     "I am with Dad",
     "I am with family",
-    "I am eating",
     "I am with hanae",
-    "i am watching a movie",
-    "yeaayas",
-    "in Lovecx",
-    "happyvc",
-    "sadvcx",
-    "yeaayz",
-    "in Loveb",
-    "happnnby",
-    "snbvd",
-    "yenbvwaay",
-    "iwn Love",
+    "I am eating",
+    "I am watching a movie",
+    "I am with mom",
+    "I am with la voisine ",
+    "I can't talk to you now !",
+    "I am mad at you !",
+    "I am SOOOOO MAD AT YOUU !!!",
+    "I am bored...",
+    "I want to go out.",
+    "I am missing you :'(",
   ];
   return (
-    <View>
+    <View style={{ marginBottom: 30 }}>
       <FlatList
         data={moods}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => {
-              selectActivity(item);
+              selectActivity(
+                item,
+                sendNotification(
+                  ExpoLoverNotif,
+                  "Your partner changed his status !"
+                )
+              );
+              ToastAndroid.show("Activity changed !", ToastAndroid.SHORT);
+
+              setIsVisible(false);
             }}
           >
             <ListView item={item} />

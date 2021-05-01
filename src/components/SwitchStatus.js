@@ -2,18 +2,24 @@ import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, View, Switch } from "react-native";
 import { Context as moodContext } from "../context/moodContext";
 import { setStatus } from "../helpers/db";
+import sendNotification from "../helpers/sendNotification";
 import Text from "./TextStyled";
 
 const SwitchStatus = ({ styles }) => {
   const {
-    state: { IsAvailable },
+    state: { IsAvailable, ExpoLoverNotif },
   } = useContext(moodContext);
   console.log("is avaiilab", IsAvailable);
   const [isEnabled, setIsEnabled] = useState(IsAvailable);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   useEffect(() => {
-    setStatus(isEnabled);
+    setStatus(isEnabled, () =>
+      sendNotification(
+        ExpoLoverNotif,
+        "Your partner changed his availability !"
+      )
+    );
   }, [isEnabled, IsAvailable]);
 
   return (
@@ -33,5 +39,3 @@ const SwitchStatus = ({ styles }) => {
 };
 
 export default SwitchStatus;
-
-const styles = StyleSheet.create({});

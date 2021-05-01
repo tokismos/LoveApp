@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import AuthForm from "../components/AuthForm";
-import { db, auth, signUp } from "../helpers/db";
+import { signUp } from "../helpers/db";
 const SignUpScreen = ({ navigation }) => {
   return (
     <View style={styles.main}>

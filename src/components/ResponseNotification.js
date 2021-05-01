@@ -1,21 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
   TouchableWithoutFeedback,
-  Dimensions,
-  Button,
   Modal,
-  TouchableOpacity,
   StatusBar,
 } from "react-native";
-import { Context as moodContext } from "../context/moodContext";
-import NotificationView from "./NotificationView";
 import LottieView from "lottie-react-native";
 import CloseIcon from "../assets/icons/close.svg";
 import { resetResponse } from "../helpers/db";
 import TextStyled from "./TextStyled";
-const Height = Dimensions.get("screen").height;
 
 const ResponseNotification = ({ response }) => {
   const [isVisible, setIsVisible] = useState(true);
@@ -47,7 +41,7 @@ const ResponseNotification = ({ response }) => {
               }}
               bold
             >
-              Khadija accepted your request :
+              Your partner accepted your request :
             </TextStyled>
           </View>
           <View
@@ -83,7 +77,7 @@ const ResponseNotification = ({ response }) => {
 
           <View style={{ marginHorizontal: 10 }}>
             <TextStyled style={{ textAlign: "center", fontSize: 16 }} bold>
-              Khadija refused your request:
+              Your partner refused your request:
             </TextStyled>
           </View>
           <View style={{ marginTop: 10, marginHorizontal: 20 }}>

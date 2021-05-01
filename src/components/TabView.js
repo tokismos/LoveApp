@@ -1,19 +1,11 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Dimensions,
-  Button,
-} from "react-native";
+import { StyleSheet, TouchableOpacity, View, Dimensions } from "react-native";
 import Animated, {
   Easing,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { setRequest } from "../helpers/db";
 import ActionList from "./ActionList";
 import HistoryList from "./HistoryList";
 import TextStyled from "./TextStyled";

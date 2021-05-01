@@ -1,12 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Button,
-  StyleSheet,
-  Text,
-  ToastAndroid,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, ToastAndroid, TouchableOpacity, View } from "react-native";
 import { Context as moodContext } from "../context/moodContext";
 import NotificationView from "./NotificationView";
 import LottieView from "lottie-react-native";
@@ -14,6 +7,7 @@ import { resetRequest, setResponse } from "../helpers/db";
 import Accept from "../assets/icons/accept.svg";
 import Refuse from "../assets/icons/refuse.svg";
 import TextStyled from "./TextStyled";
+import sendNotification from "../helpers/sendNotification";
 const RequestNotification = () => {
   const { state } = useContext(moodContext);
   const [isNotifOpen, setIsNotifOpen] = useState(true);
@@ -24,7 +18,11 @@ const RequestNotification = () => {
   }, [state.Request]);
 
   const pressButtonNotif = (res) => {
-    setResponse({ msg: state.Request, res }, state.LoverId);
+    setResponse(
+      { msg: state.Request, res },
+      state.LoverId,
+      sendNotification(state.ExpoLoverNotif, "Hey you got a response !")
+    );
     resetRequest(state.LoverId);
   };
   return (

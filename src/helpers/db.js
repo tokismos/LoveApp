@@ -1,12 +1,14 @@
 import * as firebase from "firebase";
+import { Alert } from "react-native";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBRcR98vPKAOTGFwt5Rb9IXFa7kXyPH_SY",
-  authDomain: "loveapp-69783.firebaseapp.com",
-  projectId: "loveapp-69783",
-  storageBucket: "loveapp-69783.appspot.com",
-  messagingSenderId: "555998588293",
-  appId: "1:555998588293:web:2f1fff879b6957a4c8e8ec",
+  apiKey: "AIzaSyDEWsZaPxolrZgOdLceajF2A8xAgPteSGk",
+  authDomain: "moody-6079f.firebaseapp.com",
+  databaseURL: "https://moody-6079f-default-rtdb.firebaseio.com",
+  projectId: "moody-6079f",
+  storageBucket: "moody-6079f.appspot.com",
+  messagingSenderId: "917758956918",
+  appId: "1:917758956918:web:d309a9ddbdee9fb51a5657",
 };
 
 if (!firebase.apps.length) {
@@ -17,21 +19,28 @@ const db = firebase.database();
 const auth = firebase.auth();
 const storage = firebase.storage();
 
-const setStatus = async (status) => {
+const setStatus = async (status, callback) => {
   await db.ref(`users/${auth.currentUser.uid}/IsAvailable`).set(status);
+  callback();
 };
 //Sign up
 const signUp = async (email, password) => {
-  await auth.createUserWithEmailAndPassword(email, password);
-  db.ref(`users/${auth.currentUser.uid}`).set({
-    CurrentMood: "",
-    LoverId: "",
-    ImgProfile: "",
-    CurrentActivity: "",
-    LoverId: "",
-    IsAvailable: "",
-    History: "",
-  });
+  try {
+    await auth.createUserWithEmailAndPassword(email, password);
+    db.ref(`users/${auth.currentUser.uid}`).set({
+      CurrentMood: "",
+      LoverId: "",
+      ImgProfile: "",
+      CurrentActivity: "",
+      LoverId: "",
+      IsAvailable: "",
+      History: "",
+      Request: "",
+      Response: "",
+    });
+  } catch (e) {
+    alert(e);
+  }
 };
 const signIn = async (email, password) => {
   try {
@@ -79,18 +88,20 @@ const getTime = () => {
   return firebase.database.ServerValue.TIMESTAMP;
 };
 
-const setRequest = async (req, loverId) => {
-  await db.ref(`users/${loverId}/Requests`).set(req);
+const setRequest = async (req, loverId, callback) => {
+  await db.ref(`users/${loverId}/Request`).set(req);
+  callback();
 };
 const resetRequest = async () => {
-  await db.ref(`users/${auth.currentUser.uid}/Requests`).set("");
+  await db.ref(`users/${auth.currentUser.uid}/Request`).set("");
 };
 const resetResponse = async () => {
-  await db.ref(`users/${auth.currentUser.uid}/Responses`).set("");
+  await db.ref(`users/${auth.currentUser.uid}/Response`).set("");
 };
 
-const setResponse = async (response, loverId) => {
-  await db.ref(`users/${loverId}/Responses`).set(response);
+const setResponse = async (response, loverId, callback) => {
+  await db.ref(`users/${loverId}/Response`).set(response);
+  callback();
 };
 
 export {

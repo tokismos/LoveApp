@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Dimensions,
+  ToastAndroid,
 } from "react-native";
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
@@ -23,6 +24,7 @@ import Sick from "../assets/moodIcons/sick.svg";
 import Love from "../assets/moodIcons/love.svg";
 import Heureux from "../assets/moodIcons/heureux.svg";
 import { Context as MoodContext } from "../context/moodContext";
+import sendNotification from "../helpers/sendNotification";
 const SPRING_CONFIG = {
   damping: 80,
   overshootClamping: true,
@@ -35,25 +37,38 @@ const heightMinModal = Height / 5;
 
 const moodSMiley = [
   { name: "Sick", mood: <Sick height={50} width={50} /> },
-  { name: "Triste", mood: <Triste height={50} width={50} /> },
+  { name: "Sad", mood: <Triste height={50} width={50} /> },
   { name: "Neutre", mood: <Neutre height={50} width={50} /> },
-  { name: "Heureux", mood: <Heureux height={50} width={50} /> },
+  { name: "Happy", mood: <Heureux height={50} width={50} /> },
   { name: "Love", mood: <Love height={50} width={50} /> },
 ];
 
 const Modal = ({ isVisible, setIsVisible }) => {
   const height = useSharedValue(0);
   const [isBig, setIsBig] = useState(false);
-  const { selectMood } = useContext(MoodContext);
+  const {
+    selectMood,
+    state: { ExpoLoverNotif },
+  } = useContext(MoodContext);
   const modalStyle = useAnimatedStyle(() => {
     return {
       height: withSpring(height.value, SPRING_CONFIG),
     };
   });
-
   const ShowMoodSmiley = () => {
     return moodSMiley.map((item) => (
-      <TouchableOpacity onPress={() => selectMood(item.name)} key={item.name}>
+      <TouchableOpacity
+        onPress={() => {
+          selectMood(
+            item.name,
+            sendNotification(ExpoLoverNotif, "Your partner changed his mood !")
+          );
+          ToastAndroid.show("Mood changed !", ToastAndroid.SHORT);
+
+          setIsVisible(false);
+        }}
+        key={item.name}
+      >
         {item.mood}
       </TouchableOpacity>
     ));
@@ -142,7 +157,7 @@ const Modal = ({ isVisible, setIsVisible }) => {
               alignSelf: "center",
             }}
           />
-          <ListMood />
+          <ListMood setIsVisible={setIsVisible} />
         </Animated.View>
       </PanGestureHandler>
     </>
