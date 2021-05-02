@@ -47,7 +47,7 @@ const signIn = async (email, password) => {
     await auth.signInWithEmailAndPassword(email, password);
     console.log("signed");
   } catch (e) {
-    console.log(e);
+    alert(e);
   }
 };
 

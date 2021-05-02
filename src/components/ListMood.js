@@ -22,7 +22,6 @@ const ListMood = ({ setIsVisible }) => {
   const moods = [
     "I am with Dad",
     "I am with family",
-    "I am with hanae",
     "I am eating",
     "I am watching a movie",
     "I am with mom",

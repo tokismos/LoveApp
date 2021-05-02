@@ -9,8 +9,8 @@ import {
 } from "react-native";
 
 const AuthForm = ({ title, onSubmit, isSignInScreen }) => {
-  const [email, setEmail] = useState("tokis@gmail.com");
-  const [password, setPassword] = useState("testtest");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   return (

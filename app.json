@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Moody",
-    "slug": "Moody",
+    "name": "MoodyApp",
+    "slug": "MoodyApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -24,6 +24,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "notification": {
+      "icon": "./assets/icon.png",
+      "color": "#D41422",
+      "androidMode": "default",
+      "androidCollapsedTitle": "n/a"
     }
   }
 }

@@ -100,7 +100,6 @@ export default () => {
         return;
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
-      Alert.alert(`this is the token ${token}`);
       await db.ref(`users/${uid}/ExpoNotification`).set(token);
 
       console.log(token);
