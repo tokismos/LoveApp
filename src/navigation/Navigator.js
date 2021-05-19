@@ -161,7 +161,7 @@ export default () => {
       {state.Response != "" && (
         <ResponseNotification response={state.Response} />
       )}
-      {state.Request != "" && <RequestNotification />}
+      {state.Request != "" && auth.currentUser.uid && <RequestNotification />}
 
       {/* END */}
 
